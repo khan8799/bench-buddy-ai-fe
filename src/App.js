@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header/Header';
+import Sidebar from './components/Sidebar/Sidebar';
+import ChatWindow from './components/ChatWindow/ChatWindow';
+import { useChat } from './hooks/useChat';
+import { NAV_ITEMS } from './constants/navigation';
 
 function App() {
+  const {
+    messages,
+    isLoading,
+    error,
+    activeNav,
+    setActiveNav,
+    sendMessage,
+    startNewChat,
+    dismissError,
+  } = useChat();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="h-screen flex flex-col overflow-hidden font-sans">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          navItems={NAV_ITEMS}
+          activeNav={activeNav}
+          onNavChange={setActiveNav}
+          onNewChat={startNewChat}
+        />
+        <main className="flex-1 overflow-hidden">
+          <ChatWindow
+            messages={messages}
+            onSendMessage={sendMessage}
+            isLoading={isLoading}
+            error={error}
+            onDismissError={dismissError}
+          />
+        </main>
+      </div>
     </div>
   );
 }
